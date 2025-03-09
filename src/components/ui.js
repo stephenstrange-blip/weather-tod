@@ -44,12 +44,26 @@ export class Form {
     formDiv.append(form);
     container.append(formDiv);
   }
+
+  static handleSubmit(){
+    const searchInput = document.querySelector("input[type=image]");
+    console.log(searchInput)
+
+    searchInput.addEventListener("click", (event) => {
+      event.preventDefault();
+      const dataContainer = document.querySelector(".data-container");
+      dataContainer.classList.add("is-open");
+      
+    })
+
+  }
 }
 
 export class DataContainer {
   static setup(container) {
-    const dataContainer = document.createElement("div");
     const dataSection = document.createElement("section");
+    const dataContainer = document.createElement("div");
+   
     
     const condition = document.createElement("div");
     const humidity = document.createElement("div");

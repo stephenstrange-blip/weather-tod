@@ -23,3 +23,4 @@ bodyContainer.style.height = `${height}px`;
 Form.setup(bodyContainer);
 DataContainer.setup(bodyContainer);
 document.body.append(bodyContainer);
+Form.handleSubmit();
