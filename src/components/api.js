@@ -1,7 +1,7 @@
 const completeFormat =
   "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/[location]/[date1]/[date2]?key=YOUR_API_KEY";
 
-export class Weather {
+export class WeatherAPI {
   #apiKeyVisualCrossing = "JN9KW5H3RUM2E9KWBBJ4CHCQM";
   #baseTimelineUrl =
     "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
@@ -36,6 +36,9 @@ export class Weather {
   }
 
   setDate(year, month, day) {
+    // date cannot have month or day input without year
+    // if year is undefined, so si month and day
+    if (!year) return;
     return `${year}-${month}-${day}`;
   }
 };
