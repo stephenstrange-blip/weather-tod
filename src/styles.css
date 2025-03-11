@@ -6,7 +6,7 @@
 body,
 .body-container,
 form,
-.humidity {
+section div {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -26,7 +26,7 @@ form,
   padding: 0 var(--side-padding);
   border: 0.5px solid black;
   border-radius: 15px;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .form > p > input {
@@ -53,14 +53,17 @@ form,
   }
 }
 
-
-.condition {
+.average-condition {
   text-align: center;
   font-size: var(--data-font-size);
 }
 
-.humidity {
-  align-items: flex-start;
+section div {
+  justify-content: flex-start;
+  flex-flow: row nowrap;
+  padding: .5rem;
+  gap: 1rem;
+  
 }
 
 .humidity p {
