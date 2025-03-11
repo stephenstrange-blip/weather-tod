@@ -73,4 +73,8 @@ export class Response {
   static getDays(obj) {
     return obj.days;
   }
+  
+  static getResolvedAddress(obj){
+    return obj.resolvedAddress;
+  }
 }
