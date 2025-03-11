@@ -94,7 +94,64 @@ export class DataContainer {
 
     dataContainer.classList.add("data-container");
     dataContainer.append(dataSection);
-    
+
     container.append(dataContainer);
+  }
+
+  static setTable(data) {
+    const dailyForeCast = data.days;
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+    const headerRow = document.createElement("tr");
+
+    const caption = document.createElement("caption");
+    caption.textContent = data.resolvedAddress;
+
+    let maxPropertyLength = 0;
+
+    // add daily forecast
+    dailyForeCast.forEach((day, index) => {
+      const dataRow = document.createElement("tr");
+      let currentPropertyLength, hasMoreKey;
+
+      // avoid arr[-1]
+      if (index > 0) {
+        currentPropertyLength = Object.keys(day).length;
+        console.warn(currentPropertyLength, maxPropertyLength);
+      }
+
+      // to capture all keys because some 'day' item might have
+      // snow or precip key, indicating a snow/rain probability
+      if (currentPropertyLength > maxPropertyLength) {
+        maxPropertyLength = currentPropertyLength;
+        console.warn("resetting the headerRow");
+        headerRow.textContent = "";
+        hasMoreKey = true;
+      } else {
+        hasMoreKey = false;
+      }
+
+      for (const key in day) {
+        // if headerRow is cleared, it means current 'day' item
+        // has more key properties than the last one
+        if (hasMoreKey) {
+          const header = document.createElement("th");
+          console.log(key);
+          header.textContent = key;
+          headerRow.append(header);
+        }
+
+        const td = document.createElement("td");
+        td.id = `${key}-data`;
+        td.textContent = day[key];
+        dataRow.append(td);
+      }
+      thead.append(headerRow);
+      tbody.append(dataRow);
+    });
+
+    table.append(caption, thead, tbody);
+    return table;
   }
 }

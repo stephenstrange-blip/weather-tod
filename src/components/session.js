@@ -61,7 +61,6 @@ export class Session {
 
         console.warn("Updating container...");
         this.updateContainer(data);
-
       } catch (err) {
         alert(err);
       }
@@ -72,7 +71,6 @@ export class Session {
     const dataContainer = document.querySelector(".data-container");
     const dataSection = document.querySelector(".data-container > section");
     const averageCondition = document.querySelector(".average-condition");
-    const dailyForeCast = data.days;
 
     // reset the data section and hide the container
     dataSection.textContent = "";
@@ -81,33 +79,16 @@ export class Session {
     // add headline condition or update its text content
     if (!averageCondition) {
       const aveCondition = document.createElement("div");
-      aveCondition.classList.add("average-condition");
       aveCondition.textContent = data["averageCondition"];
+      aveCondition.classList.add("average-condition");
       dataContainer.insertBefore(aveCondition, dataSection);
-
+      
     } else {
       averageCondition.textContent = data["averageCondition"];
     }
-    
-    // add daily forecast
-    dailyForeCast.forEach((day) => {
-      const element = document.createElement("div");
 
-      for (const key in day) {
-        const label = document.createElement("label");
-        const p = document.createElement("p");
-
-        p.id = `${key}-data`;
-        label.for = p.id;
-
-        label.textContent = `${key}: `;
-        p.textContent = day[key];
-
-        element.append(label, p);
-      }
-      dataSection.append(element);
-    })
-
+    const table = DataContainer.setTable(data);
+    dataSection.append(table);
     // show the container with slide transition
     dataContainer.classList.add("is-open");
   }
@@ -116,8 +97,10 @@ export class Session {
     const inputs = Array.from(
       document.querySelectorAll("input:not([type=image])"),
     );
+
     const location = inputs.filter((input) => input.id === "location-input")[0]
       .value;
+
     const initial = this.getDateInput(inputs, "date1-input");
     const end = this.getDateInput(inputs, "date2-input");
 
@@ -143,10 +126,9 @@ export class Session {
   }
 
   filterData(obj) {
-    console.warn(obj);
     const data = {};
     const dailyForecast = [...obj.days];
-    console.warn(dailyForecast);
+    data["resolvedAddress"] = Response.getResolvedAddress(obj);
     data["averageCondition"] = Response.getAveCondition(obj);
     data["days"] = Response.getDailyForecast(dailyForecast);
 
