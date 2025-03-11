@@ -28,7 +28,7 @@ export class Form {
     date1Input.min = "2000-01-01";
     date1Input.max = "2050-12-30";
     date1Input.value = "0000-00-00";
-    
+
     date2Para.textContent = "-";
     date2Input.type = "date";
     date2Input.min = date1Input.value;
@@ -79,11 +79,8 @@ export class Form {
           endDate.validity.valid
         ) {
           searchBtn.removeAttribute("disabled");
-          // console.warn("Button is now clickable!");
         } else {
           searchBtn.setAttribute("disabled", "true");
-          // console.warn("Button not clickable!");
-          // console.warn(input.validationMessage, input);
         }
       });
     });
@@ -91,28 +88,13 @@ export class Form {
 }
 
 export class DataContainer {
-
   static setup(container) {
     const dataSection = document.createElement("section");
     const dataContainer = document.createElement("div");
 
-    const condition = document.createElement("div");
-    const humidity = document.createElement("div");
-
-    const humidityLabel = document.createElement("label");
-    const humidityData = document.createElement("p");
-
-    humidityData.id = "humidity-data";
-    humidityLabel.for = humidityData.id;
-
-    humidityLabel.textContent = "Humidity: ";
-    condition.classList.add("condition");
-    humidity.classList.add("humidity");
     dataContainer.classList.add("data-container");
-
-    humidity.append(humidityLabel, humidityData);
-    dataSection.append(humidity);
-    dataContainer.append(condition, dataSection);
+    dataContainer.append(dataSection);
+    
     container.append(dataContainer);
   }
 }
