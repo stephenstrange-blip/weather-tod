@@ -6,18 +6,16 @@ export class WeatherAPI {
   #baseTimelineUrl =
     "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
 
-
   async fetchData(query) {
     try {
       const response = await fetch(query, {
         mode: "cors",
         method: "GET",
-        "headers" : {}
+        headers: {},
       });
 
       const obj = await response.json();
-			return obj;
-
+      return obj;
     } catch (err) {
       throw Error(err);
     }
@@ -25,7 +23,7 @@ export class WeatherAPI {
 
   setQuery(location, date1, date2) {
     let query;
-		let base = this.#baseTimelineUrl;
+    let base = this.#baseTimelineUrl;
 
     if (!date1) query = base + `/${location}`;
     if (!!date1 && !date2) query = base + `/${location}/${date1}`;
@@ -41,15 +39,38 @@ export class WeatherAPI {
     if (!year) return;
     return `${year}-${month}-${day}`;
   }
-};
+}
 
 export class Response {
 
-	static getHumidity(day){
-			return day.humidity
-	}
+  static getDailyForecast(days){
+    const requiredKeys = ["datetime", "temp", "tempmax", "humidity", "conditions"];
+    const optionalKeys = ["precip", "snow"];
+    const arr = [];
 
-	static getCondition(day){
-			return day.conditions
-	}
+    days.forEach((day) => {
+      const dailyForeCast = {};
+
+      requiredKeys.forEach((key) => {
+        dailyForeCast[key] = day[key];
+      })
+
+      optionalKeys.forEach((key) => {
+        if (Number(day[key]) > 0)
+          dailyForeCast[key] = day[key];
+      })
+
+      arr.push(dailyForeCast);
+    })
+
+    return arr;
+  }
+
+  static getAveCondition(obj) {
+    return obj.currentConditions.conditions;
+  }
+
+  static getDays(obj) {
+    return obj.days;
+  }
 }
