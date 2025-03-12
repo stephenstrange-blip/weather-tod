@@ -2,6 +2,7 @@ import { WeatherAPI, Response } from "./api";
 import { Form, DataContainer } from "./ui";
 
 export class Session {
+
   constructor() {
     const weather = new WeatherAPI();
 
@@ -13,13 +14,10 @@ export class Session {
     bodyContainer.style.width = `${width}px`;
     bodyContainer.style.height = `${height}px`;
 
-    console.warn("Setting up form");
     Form.setup(bodyContainer);
-    console.warn("Setting up data container");
     DataContainer.setup(bodyContainer);
-    console.warn("Finalizing html...");
     document.body.append(bodyContainer);
-    console.warn("Form handleValidate evaluating...");
+   
     Form.handleValidate();
     this.handleSubmit();
   }
@@ -30,7 +28,6 @@ export class Session {
     searchInput.addEventListener("click", async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      console.warn("Starting Weather API");
       const weather = new WeatherAPI();
       const input = this.getInput();
       const initialDate = weather.setDate(
@@ -43,24 +40,18 @@ export class Session {
         input.end.month,
         input.end.date,
       );
-      console.warn(
-        "Inputs are finalized and are as follows",
-        input.location,
-        initialDate,
-        endDate,
-      );
+      
       try {
+        // Hide the data container ASAP
+        // calling the method inside updateContainer causes the class
+        // to update too fast for the animation to occur
+        DataContainer.toggleClassList();
+
         const query = weather.setQuery(input.location, initialDate, endDate);
-        console.warn("Finalizing query...", query);
-
-        console.warn("Fetching Data...");
         const obj = await weather.fetchData(query);
-
-        console.warn("Data Fetched. Filtering data...", obj);
         const data = this.filterData(obj);
-
-        console.warn("Updating container...");
         this.updateContainer(data);
+
       } catch (err) {
         alert(err);
       }
@@ -74,23 +65,24 @@ export class Session {
 
     // reset the data section and hide the container
     dataSection.textContent = "";
+    // double-check to see if the target class isn't removed yet
     dataContainer.classList.remove("is-open");
-
+    
     // add headline condition or update its text content
     if (!averageCondition) {
       const aveCondition = document.createElement("div");
       aveCondition.textContent = data["averageCondition"];
       aveCondition.classList.add("average-condition");
       dataContainer.insertBefore(aveCondition, dataSection);
-      
     } else {
       averageCondition.textContent = data["averageCondition"];
     }
 
     const table = DataContainer.setTable(data);
     dataSection.append(table);
+
     // show the container with slide transition
-    dataContainer.classList.add("is-open");
+    DataContainer.toggleClassList();
   }
 
   getInput() {
@@ -104,7 +96,6 @@ export class Session {
     const initial = this.getDateInput(inputs, "date1-input");
     const end = this.getDateInput(inputs, "date2-input");
 
-    console.warn("Getting all inputs", location, initial, end);
     return { location, initial, end };
   }
 
@@ -112,12 +103,12 @@ export class Session {
     const dateValue = array.filter((item) => item.id === id)[0].value;
 
     if (!dateValue) {
-      console.warn("Date inputs are empty");
       return {
         year: "",
         month: "",
         date: "",
       };
+
     } else {
       const [year, month, date] = dateValue.split("-");
       console.warn("Getting date inputs", year, month, date);
@@ -132,7 +123,6 @@ export class Session {
     data["averageCondition"] = Response.getAveCondition(obj);
     data["days"] = Response.getDailyForecast(dailyForecast);
 
-    console.warn(data);
     return data;
   }
 }
