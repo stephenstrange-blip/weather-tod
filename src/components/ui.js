@@ -1,4 +1,4 @@
-import searchIcon from "/home/jmpi/vscode_repos/weather-tod/src/assets/searchIcon.svg";
+import searchIcon from "/home/jmpi/vscode_repos/weather-tod/src/assets/magnifying-glass-solid.svg";
 
 export class Form {
   static setup(container) {
@@ -51,12 +51,15 @@ export class Form {
 
   static handleValidate() {
     const searchBtn = document.querySelector("input[type=image]");
+
+    // destructuring for the validity check
     const [location, initalDate, endDate] =
       document.querySelectorAll("input[id$=input]");
+
+    // restructuring for a for-loop
     const inputs = [location, initalDate, endDate];
 
     const validate = (input) => {
-      // console.warn(input.validity);
       if (input.validity.rangeUnderflow)
         input.setCustomValidity("Date too early or invalid input!");
       else if (input.validity.rangeOverflow)
@@ -71,8 +74,9 @@ export class Form {
 
       input.addEventListener("input", () => {
         validate(input);
-        // console.log(input.reportValidity());
 
+        // continuously check validty of ALL inputs
+        // only enable the button if all inputs are valid
         if (
           location.validity.valid &&
           initalDate.validity.valid &&
@@ -88,6 +92,7 @@ export class Form {
 }
 
 export class DataContainer {
+
   static setup(container) {
     const dataSection = document.createElement("section");
     const dataContainer = document.createElement("div");
@@ -111,21 +116,16 @@ export class DataContainer {
     let maxPropertyLength = 0;
 
     // add daily forecast
-    dailyForeCast.forEach((day, index) => {
+    dailyForeCast.forEach((day) => {
       const dataRow = document.createElement("tr");
       let currentPropertyLength, hasMoreKey;
 
-      // avoid arr[-1]
-      if (index > 0) {
-        currentPropertyLength = Object.keys(day).length;
-        console.warn(currentPropertyLength, maxPropertyLength);
-      }
-
+      currentPropertyLength = Object.keys(day).length;
+      
       // to capture all keys because some 'day' item might have
       // snow or precip key, indicating a snow/rain probability
       if (currentPropertyLength > maxPropertyLength) {
         maxPropertyLength = currentPropertyLength;
-        console.warn("resetting the headerRow");
         headerRow.textContent = "";
         hasMoreKey = true;
       } else {
@@ -137,7 +137,6 @@ export class DataContainer {
         // has more key properties than the last one
         if (hasMoreKey) {
           const header = document.createElement("th");
-          console.log(key);
           header.textContent = key;
           headerRow.append(header);
         }
@@ -151,7 +150,30 @@ export class DataContainer {
       tbody.append(dataRow);
     });
 
+    // iterate through each row of the table,
+    // and add extra data cells as placeholder to 
+    // empty columns for styling purposes
+    for(let i = 0; i < tbody.childNodes.length; i++){
+      for (let j = 0; j < maxPropertyLength; j++) {
+        if (!tbody.childNodes[i].childNodes[j]){
+          const tr = document.createElement("td");
+          tr.textContent = "--"
+          tbody.childNodes[i].append(tr);
+        }
+      }
+    }
+
     table.append(caption, thead, tbody);
     return table;
+  }
+
+  static toggleClassList(){
+    const dataContainer = document.querySelector(".data-container");
+
+    if (dataContainer.classList.contains("is-open")){
+      dataContainer.classList.remove("is-open");
+    } else {
+      dataContainer.classList.add("is-open");
+    }
   }
 }
