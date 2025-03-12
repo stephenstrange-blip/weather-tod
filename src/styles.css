@@ -30,9 +30,15 @@ section div {
 }
 
 .form > p > input {
-  height: 2rem;
-  padding: 0 var(--side-padding);
+  height: fit-content;
+  padding: 0.5rem var(--side-padding);
   border: 0px;
+}
+
+input[type="image"] {
+  width: 2rem;
+  overflow: visible;
+  display: flex;
 }
 
 .data-container {
@@ -41,13 +47,15 @@ section div {
   padding: 2rem 5rem;
   width: clamp(400px, 30rem + 100%, 1500px);
   height: 80%;
-  transition: transform .5s ease-out;
+  transition:
+    transform 0.5s ease-out;
+  overflow-y: scroll;
   transition-behavior: allow-discrete;
 }
 
 .data-container.is-open {
-  display: block ;
   transform: translateY(0);
+  display: block;
   @starting-style {
     transform: translateY(500px);
   }
@@ -61,13 +69,24 @@ section div {
 section div {
   justify-content: flex-start;
   flex-flow: row nowrap;
-  padding: .5rem;
-  gap: 1rem;
-  
+  padding: 0.5rem;
 }
 
-.humidity p {
-  font-size: var(--data-font-size);
+table {
+  width: 100%;
+  /* border: 2px solid black; */
+  border-collapse: collapse;
+}
+thead th {
+  border-bottom: 5px solid rgba(250, 235, 215, 0.8);
+  padding: 0.5rem;
 }
 
+tbody td {
+  text-align: center;
+  padding: 0.5rem;
+}
 
+tbody > tr:nth-child(odd) > td {
+  background-color: rgba(250, 235, 215, 0.6);
+}

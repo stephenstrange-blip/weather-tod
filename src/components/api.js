@@ -35,7 +35,7 @@ export class WeatherAPI {
 
   setDate(year, month, day) {
     // date cannot have month or day input without year
-    // if year is undefined, so si month and day
+    // if year is undefined, so is month and day
     if (!year) return;
     return `${year}-${month}-${day}`;
   }
@@ -55,6 +55,8 @@ export class Response {
         dailyForeCast[key] = day[key];
       })
 
+      // some 'day' items might have snow or rain
+      // only add if the probability is greater than 0
       optionalKeys.forEach((key) => {
         if (Number(day[key]) > 0)
           dailyForeCast[key] = day[key];
