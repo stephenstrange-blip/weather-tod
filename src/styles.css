@@ -2,7 +2,13 @@
   --side-padding: 0.5rem;
   --data-font-size: 2rem;
 }
-
+body {
+  transition-behavior: allow-discrete;
+  transition: background 1.5s ease-in;
+  @starting-style {
+    background-image: none;
+  }
+}
 body,
 .body-container,
 form,
@@ -33,6 +39,7 @@ section div {
   height: fit-content;
   padding: 0.5rem var(--side-padding);
   border: 0px;
+  background-color: transparent;
 }
 
 input[type="image"] {

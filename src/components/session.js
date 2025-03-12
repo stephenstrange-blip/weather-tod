@@ -2,7 +2,6 @@ import { WeatherAPI, Response } from "./api";
 import { Form, DataContainer } from "./ui";
 
 export class Session {
-
   constructor() {
     const weather = new WeatherAPI();
 
@@ -17,7 +16,7 @@ export class Session {
     Form.setup(bodyContainer);
     DataContainer.setup(bodyContainer);
     document.body.append(bodyContainer);
-   
+
     Form.handleValidate();
     this.handleSubmit();
   }
@@ -40,7 +39,7 @@ export class Session {
         input.end.month,
         input.end.date,
       );
-      
+
       try {
         // Hide the data container ASAP
         // calling the method inside updateContainer causes the class
@@ -51,7 +50,6 @@ export class Session {
         const obj = await weather.fetchData(query);
         const data = this.filterData(obj);
         this.updateContainer(data);
-
       } catch (err) {
         alert(err);
       }
@@ -67,7 +65,7 @@ export class Session {
     dataSection.textContent = "";
     // double-check to see if the target class isn't removed yet
     dataContainer.classList.remove("is-open");
-    
+
     // add headline condition or update its text content
     if (!averageCondition) {
       const aveCondition = document.createElement("div");
@@ -83,6 +81,24 @@ export class Session {
 
     // show the container with slide transition
     DataContainer.toggleClassList();
+    console.log(data["averageCondition"])
+
+    //cannot split ", " at once because some conditions don't have commas
+    let condition = data["averageCondition"]
+      .trim()
+      .split(",") 
+      .join("")
+      .split(" ")
+      .join("")
+      .toLowerCase(); 
+
+    import(`./${condition}.js`)
+      .then((module) => {
+        module.loadStyling();
+      })
+      .catch((reason) => {
+        alert(new Error(reason));
+      });
   }
 
   getInput() {
@@ -108,7 +124,6 @@ export class Session {
         month: "",
         date: "",
       };
-
     } else {
       const [year, month, date] = dateValue.split("-");
       console.warn("Getting date inputs", year, month, date);
