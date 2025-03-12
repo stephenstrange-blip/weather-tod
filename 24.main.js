@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkweather_tod=self.webpackChunkweather_tod||[]).push([[24],{24:(t,r,n)=>{function a(){document.querySelectorAll("tbody > tr:nth-child(odd)").forEach((t=>{t.style.backgroundColor="#8b92b7"})),document.body.style.backgroundImage="linear-gradient(45deg, transparent, transparent, transparent, transparent, transparent, #8b92b7), linear-gradient(315deg, transparent, transparent, transparent, transparent, transparent, #8b92b7)"}n.r(r),n.d(r,{loadStyling:()=>a})}}]);
+//# sourceMappingURL=24.main.js.map
